@@ -4,13 +4,13 @@ import styles from './index.less';
 
 interface Props {}
 
-const MinePage: React.FC<Props> = () => {
+const AIAssistantPage: React.FC<Props> = () => {
   return (
     <>
       <MotionWrap variant="slideUp">
         <div className={styles.page}>
-          <h1 className={styles.title}>我的</h1>
-          <p className={styles.desc}>个人中心页面</p>
+          <h1 className={styles.title}>AI助手</h1>
+          <p className={styles.desc}>智能助手页面</p>
         </div>
       </MotionWrap>
       <TabBar />
@@ -18,4 +18,4 @@ const MinePage: React.FC<Props> = () => {
   );
 };
 
-export default MinePage;
+export default AIAssistantPage;

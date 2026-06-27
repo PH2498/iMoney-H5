@@ -4,13 +4,13 @@ import styles from './index.less';
 
 interface Props {}
 
-const MinePage: React.FC<Props> = () => {
+const StatsPage: React.FC<Props> = () => {
   return (
     <>
-      <MotionWrap variant="slideUp">
+      <MotionWrap variant="fade">
         <div className={styles.page}>
-          <h1 className={styles.title}>我的</h1>
-          <p className={styles.desc}>个人中心页面</p>
+          <h1 className={styles.title}>统计</h1>
+          <p className={styles.desc}>数据统计页面</p>
         </div>
       </MotionWrap>
       <TabBar />
@@ -18,4 +18,4 @@ const MinePage: React.FC<Props> = () => {
   );
 };
 
-export default MinePage;
+export default StatsPage;

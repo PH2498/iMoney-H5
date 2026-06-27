@@ -25,9 +25,14 @@ export default defineConfig({
       component: './Home',
     },
     {
-      name: '商品',
-      path: '/product',
-      component: './Product',
+      name: '统计',
+      path: '/stats',
+      component: './Stats',
+    },
+    {
+      name: 'AI助手',
+      path: '/ai-assistant',
+      component: './AIAssistant',
     },
     {
       name: '我的',
