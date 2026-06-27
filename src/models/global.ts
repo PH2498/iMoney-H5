@@ -1,13 +1,14 @@
-// 全局共享数据示例
-import { DEFAULT_NAME } from '@/constants';
+// H5 全局共享状态
 import { useState } from 'react';
 
-const useUser = () => {
-  const [name, setName] = useState<string>(DEFAULT_NAME);
+const useGlobal = () => {
+  /** 当前激活的底部 tab 索引 */
+  const [activeTab, setActiveTab] = useState<number>(0);
+
   return {
-    name,
-    setName,
+    activeTab,
+    setActiveTab,
   };
 };
 
-export default useUser;
+export default useGlobal;

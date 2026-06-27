@@ -1,17 +1,20 @@
-import Guide from '@/components/Guide';
-import { trim } from '@/utils/format';
-import { PageContainer } from '@ant-design/pro-components';
-import { useModel } from '@umijs/max';
+import { Button } from 'antd-mobile';
+import MotionWrap from '@/components/base/MotionWrap';
 import styles from './index.less';
 
-const HomePage: React.FC = () => {
-  const { name } = useModel('global');
+interface Props {}
+
+const HomePage: React.FC<Props> = () => {
   return (
-    <PageContainer ghost>
-      <div className={styles.container}>
-        <Guide name={trim(name)} />
+    <MotionWrap variant="fade">
+      <div className={styles.page}>
+        <h1 className={styles.title}>首页</h1>
+        <p className={styles.desc}>欢迎使用 iMoney H5</p>
+        <Button color="primary" size="large" block>
+          开始使用
+        </Button>
       </div>
-    </PageContainer>
+    </MotionWrap>
   );
 };
 

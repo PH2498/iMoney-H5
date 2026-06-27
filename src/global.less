@@ -1,0 +1,57 @@
+/* 移动端全局重置样式 */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* 禁止双指缩放 */
+  touch-action: manipulation;
+  /* 禁止文字选中（按需放开） */
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+html {
+  /* 禁止缩放 */
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  line-height: 1.5;
+  color: #333;
+  background-color: #f5f5f5;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* 滚动优化 */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* 底部安全区域适配 */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}

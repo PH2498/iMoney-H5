@@ -1,14 +1,19 @@
 import { defineConfig } from '@umijs/max';
 
 export default defineConfig({
-  antd: {},
-  access: {},
   model: {},
   initialState: {},
   request: {},
-  layout: {
-    title: '@umijs/max',
-  },
+  extraPostCSSPlugins: [
+    require('postcss-px-to-viewport')({
+      viewportWidth: 375,
+      unitPrecision: 5,
+      viewportUnit: 'vw',
+      selectorBlackList: [],
+      minPixelValue: 1,
+      mediaQuery: false,
+    }),
+  ],
   routes: [
     {
       path: '/',
@@ -20,17 +25,15 @@ export default defineConfig({
       component: './Home',
     },
     {
-      name: '权限演示',
-      path: '/access',
-      component: './Access',
+      name: '商品',
+      path: '/product',
+      component: './Product',
     },
     {
-      name: ' CRUD 示例',
-      path: '/table',
-      component: './Table',
+      name: '我的',
+      path: '/mine',
+      component: './Mine',
     },
   ],
   npmClient: 'yarn',
-  utoopack: {},
 });
-
