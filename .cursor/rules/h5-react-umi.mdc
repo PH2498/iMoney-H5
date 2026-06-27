@@ -8,7 +8,6 @@ alwaysApply: true
 框架：Umi Max (React18 + TypeScript)
 移动端UI：antd-mobile，禁止混用PC端 antd 做页面主体
 图标：@ant-design/icons
-工具hooks库：react-bits
 动画库：framer-motion
 样式：Less，vw移动端适配(postcss-px-to-viewport 基准375px)
 状态：umi useModel / useState，不引入Redux、Zustand等第三方状态库
@@ -33,7 +32,7 @@ src
 ├── assets 图片、字体、全局样式
 ├── components
 │ ├── base 通用基础组件：按钮、弹窗、全局 motion 动画封装
-│ ├── business 业务复用组件：商品卡片、表单模块、列表项
+│ ├── business 业务复用组件：卡片、表单模块、列表项
 ├── hooks 全局自定义 hooks（动画、请求、埋点、设备适配）
 ├── models Umi 全局状态 model
 ├── pages 路由页面，约定式路由，文件夹对应路由路径
@@ -60,7 +59,7 @@ src
 ## 五、移动端适配规范
 1. 设计稿基准 375px，所有尺寸写 px，由 postcss 自动转 vw
 2. 页面根容器禁止固定px宽度，100%自适应
-3. 设备尺寸、页面滚动监听优先复用 react-bits hooks，不重复封装
+3. 设备尺寸、页面滚动监听优先复用 ，不重复封装
 4. 禁止双指缩放，viewport 配置统一锁定缩放
 
 ## 六、framer-motion 动画统一规范（AI生成动画强制遵循）
@@ -69,10 +68,6 @@ src
 3. 所有 motion 元素添加硬件加速样式 willChange: 'transform, opacity'
 4. 弹窗、路由切换离场动画必须使用 <AnimatePresence> 包裹
 5. 长列表滚动动画增加节流，避免移动端高负载掉帧
-
-## 七、react-bits 使用规范
-1. 窗口尺寸、滚动、媒体查询优先使用 react-bits 提供 hooks，不重复手写监听 resize/scroll
-2. 不重复封装窗口宽高、滚动Y值逻辑，统一复用 useWindowSize / useScroll
 
 ## 八、样式 Less 规范
 1. 全局重置统一 global.less，页面私有样式隔离对应 less 文件

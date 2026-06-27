@@ -1,4 +1,14 @@
-/* 底部 TabBar 容器包裹层（适配安全区） */
+/* Liquid Glass 设计令牌 */
+@primary-blue: #0058bc;
+@primary-glow: rgba(0, 88, 188, 0.35);
+@on-surface-variant: #414755;
+@glass-bg: rgba(255, 255, 255, 0.42);
+@glass-border: rgba(255, 255, 255, 0.72);
+@glass-highlight: rgba(255, 255, 255, 0.92);
+@pill-bg: rgba(255, 255, 255, 0.58);
+@pill-border: rgba(255, 255, 255, 0.88);
+
+/* 底部 TabBar 容器包裹层 */
 .wrapper {
   position: fixed;
   bottom: 0;
@@ -16,66 +26,126 @@
   }
 }
 
-/* 玻璃拟态 TabBar */
+/* Liquid Glass 导航条主体 */
 .tabbar {
+  position: relative;
   display: flex;
   justify-content: space-around;
   align-items: center;
   width: 100%;
   max-width: 600px;
-  height: 64px;
-  background: rgba(255, 255, 255, 0.4);
-  backdrop-filter: blur(40px);
-  -webkit-backdrop-filter: blur(40px);
-  border: 0.5px solid rgba(255, 255, 255, 0.6);
-  border-radius: 32px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+  height: 72px;
+  padding: 6px 8px;
+  overflow: hidden;
+  isolation: isolate;
+
+  /* 多层玻璃基底 */
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.55) 0%,
+      rgba(255, 255, 255, 0.28) 48%,
+      rgba(255, 255, 255, 0.38) 100%
+    ),
+    @glass-bg;
+  backdrop-filter: blur(48px) saturate(180%);
+  -webkit-backdrop-filter: blur(48px) saturate(180%);
+
+  border: 0.5px solid @glass-border;
+  border-radius: 36px;
+
+  /* 外扩散阴影 + 内顶部高光 */
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.08),
+    0 8px 24px rgba(0, 88, 188, 0.06),
+    inset 0 1px 0 @glass-highlight,
+    inset 0 -1px 0 rgba(255, 255, 255, 0.25);
+}
+
+/* 顶部镜面高光 */
+.glassSpecular {
+  position: absolute;
+  top: 0;
+  left: 8%;
+  right: 8%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.95) 50%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* 液态光泽层 */
+.glassSheen {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    ellipse 80% 60% at 50% -20%,
+    rgba(255, 255, 255, 0.45) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 1;
 }
 
 /* 单个 Tab 项 */
 .tabItem {
   position: relative;
+  z-index: 3;
   display: flex;
+  flex: 1;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 64px;
-  height: 48px;
-  border-radius: 24px;
+  min-width: 0;
+  height: 56px;
   border: none;
+  border-radius: 28px;
   background: transparent;
   cursor: pointer;
-  transition: transform 0.2s ease;
-  color: #414755;
+  color: @on-surface-variant;
   font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.1px;
   -webkit-tap-highlight-color: transparent;
   outline: none;
-
-  &:active {
-    transform: scale(0.95);
-  }
 }
 
-/* 激活态胶囊背景 */
-.activeBg {
+/* 液态玻璃激活胶囊（layoutId 滑动） */
+.liquidIndicator {
   position: absolute;
-  inset: 0;
-  background: rgba(255, 255, 255, 0.5);
+  inset: 4px 2px;
   border-radius: 24px;
-  border: 0.5px solid rgba(255, 255, 255, 0.8);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
   z-index: 0;
+
+  background:
+    linear-gradient(
+      165deg,
+      rgba(255, 255, 255, 0.78) 0%,
+      rgba(255, 255, 255, 0.52) 45%,
+      rgba(255, 255, 255, 0.65) 100%
+    ),
+    @pill-bg;
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+
+  border: 0.5px solid @pill-border;
+  box-shadow:
+    0 4px 16px rgba(0, 88, 188, 0.12),
+    0 2px 8px rgba(0, 0, 0, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -2px 6px rgba(0, 88, 188, 0.04);
 }
 
 /* 激活态 Tab */
 .tabItemActive {
-  color: #0058bc;
+  color: @primary-blue;
   font-weight: 700;
-  transform: scale(1.08);
-
-  &:active {
-    transform: scale(1.02);
-  }
 }
 
 /* 图标容器 */
@@ -86,15 +156,27 @@
   align-items: center;
   justify-content: center;
   font-size: 22px;
-  margin-bottom: 2px;
-  transition: color 0.2s ease;
+  margin-bottom: 3px;
+  line-height: 1;
+}
+
+.iconInactive {
+  color: @on-surface-variant;
+  opacity: 0.85;
+  transition: color 0.25s ease, opacity 0.25s ease;
+}
+
+.iconActive {
+  color: @primary-blue;
+  filter: drop-shadow(0 2px 6px @primary-glow);
+  transition: color 0.25s ease, filter 0.25s ease;
 }
 
 /* 文字标签 */
 .label {
   position: relative;
   z-index: 1;
-  line-height: 1;
-  transition: color 0.2s ease;
+  line-height: 1.1;
   font-weight: inherit;
+  white-space: nowrap;
 }
