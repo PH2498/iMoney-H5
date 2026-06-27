@@ -1,0 +1,93 @@
+---
+description: Umi Max 移动端H5项目统一编码、AI生成约束规则
+globs: src/**/*.{ts,tsx,less,json}
+alwaysApply: true
+---
+# 项目全局AI编码强制规则（Cursor AI 必须严格遵守）
+## 一、项目基础技术栈基线
+框架：Umi Max (React18 + TypeScript)
+移动端UI：antd-mobile，禁止混用PC端 antd 做页面主体
+图标：@ant-design/icons
+工具hooks库：react-bits
+动画库：framer-motion
+样式：Less，vw移动端适配(postcss-px-to-viewport 基准375px)
+状态：umi useModel / useState，不引入Redux、Zustand等第三方状态库
+请求：内置 umi-request，统一全局拦截
+包管理器：pnpm
+编辑器：Cursor
+
+## 二、AI 代码生成硬性红线（禁止行为）
+1. 禁止生成 class 类组件，全部使用函数组件 + React Hooks
+2. 禁止使用 any、unknown 模糊类型，所有变量/接口/Props 必须完整 TS 类型定义
+3. 禁止硬编码接口地址、固定常量，统一抽至 src/utils / src/request
+4. 禁止大量行内样式，动态动画值除外，其余样式统一抽 less 文件
+5. 禁止页面单文件代码超过300行，复杂模块强制拆分业务组件
+6. 禁止全局污染变量，组件内部逻辑封装自定义hooks
+7. 禁止删除/修改项目已有 umirc.ts、global.less、request、models 全局配置
+8. 禁止使用过时API：framer-motion v10+、React18 新语法，不写废弃写法
+9. 禁止遗留 console.log、debugger，上线代码必须清理
+10. 禁止页面切换无退场动画，路由弹窗必须包裹 AnimatePresence
+
+## 三、目录分层规范（AI生成文件自动遵循目录）
+src
+├── assets 图片、字体、全局样式
+├── components
+│ ├── base 通用基础组件：按钮、弹窗、全局 motion 动画封装
+│ ├── business 业务复用组件：商品卡片、表单模块、列表项
+├── hooks 全局自定义 hooks（动画、请求、埋点、设备适配）
+├── models Umi 全局状态 model
+├── pages 路由页面，约定式路由，文件夹对应路由路径
+├── request 统一请求拦截、接口分组封装
+├── mock 本地模拟接口
+├── types 全局通用 TS 类型定义
+├── utils 工具函数：日期、格式化、校验、埋点
+├── global.less 移动端全局重置样式
+└── app.tsx 运行时全局配置、路由守卫
+
+### 文件命名规范
+1. 页面/组件：大驼峰 UserInfo.tsx
+2. hooks：小驼峰 useScrollAnim.ts
+3. 类型文件：xxx.types.ts
+4. 样式：同组件名 UserInfo.less
+5. model：小驼峰 user.ts
+
+## 四、TypeScript 类型规范
+1. 组件入参统一使用 interface Props，不使用 type
+2. 接口返回数据统一命名 XxxRes，存放全局 types 或页面顶部
+3. 枚举统一抽离，不内联写死数字/字符串
+4. 可选参数明确 ?，不滥用类型断言 as
+
+## 五、移动端适配规范
+1. 设计稿基准 375px，所有尺寸写 px，由 postcss 自动转 vw
+2. 页面根容器禁止固定px宽度，100%自适应
+3. 设备尺寸、页面滚动监听优先复用 react-bits hooks，不重复封装
+4. 禁止双指缩放，viewport 配置统一锁定缩放
+
+## 六、framer-motion 动画统一规范（AI生成动画强制遵循）
+1. 页面入场、列表、弹窗动画统一封装至 src/components/base/MotionWrap，页面直接复用，禁止重复编写变体参数
+2. 交互动画（按钮按压、卡片hover）优先 spring 弹簧过渡，tween 仅用于匀速过渡场景
+3. 所有 motion 元素添加硬件加速样式 willChange: 'transform, opacity'
+4. 弹窗、路由切换离场动画必须使用 <AnimatePresence> 包裹
+5. 长列表滚动动画增加节流，避免移动端高负载掉帧
+
+## 七、react-bits 使用规范
+1. 窗口尺寸、滚动、媒体查询优先使用 react-bits 提供 hooks，不重复手写监听 resize/scroll
+2. 不重复封装窗口宽高、滚动Y值逻辑，统一复用 useWindowSize / useScroll
+
+## 八、样式 Less 规范
+1. 全局重置统一 global.less，页面私有样式隔离对应 less 文件
+2. 颜色、间距、圆角统一抽全局 less 变量，禁止魔法数字
+3. 布局使用 flex 为主，适配移动端；禁止 float 布局
+4. 动画静态样式放 less，动态变换值使用 framer-motion 内联 style
+
+## 九、Git & 注释规范
+1. 复杂业务逻辑、动画参数、接口出入参必须添加单行注释
+2. 提交信息遵循规范：feat/fix/style/refactor/docs/chore(模块): 描述
+3. AI 重构代码时保留原有业务注释，不得无理由删除注释
+
+## 十、AI 开发工作流约束
+1. 需求阶段：先输出 TS 类型定义、页面结构分层，再写业务代码
+2. 页面开发：先布局骨架 → 再表单/列表渲染 → 最后补充 framer-motion 动画
+3. 代码完成后自动执行 ESLint + Prettier 格式化、修复语法报错
+4. 长列表、大量动画场景，主动输出性能优化方案（虚拟滚动、动画节流）
+5. 打包前主动分析依赖体积，提供按需引入、分包优化建议
