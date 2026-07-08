@@ -1,12 +1,12 @@
 /* Liquid Glass 设计令牌 */
 @primary-blue: #0058bc;
-@primary-glow: rgba(0, 88, 188, 0.35);
+@primary-glow: rgba(0, 88, 188, 0.18);
 @on-surface-variant: #414755;
-@glass-bg: rgba(255, 255, 255, 0.42);
-@glass-border: rgba(255, 255, 255, 0.72);
-@glass-highlight: rgba(255, 255, 255, 0.92);
-@pill-bg: rgba(255, 255, 255, 0.58);
-@pill-border: rgba(255, 255, 255, 0.88);
+@glass-bg: rgba(255, 255, 255, 0.10);
+@glass-border: rgba(255, 255, 255, 0.22);
+@glass-highlight: rgba(255, 255, 255, 0.48);
+@pill-bg: rgba(255, 255, 255, 0.16);
+@pill-border: rgba(255, 255, 255, 0.32);
 
 /* 底部 TabBar 容器包裹层 */
 .wrapper {
@@ -43,23 +43,24 @@
   background:
     linear-gradient(
       180deg,
-      rgba(255, 255, 255, 0.55) 0%,
-      rgba(255, 255, 255, 0.28) 48%,
-      rgba(255, 255, 255, 0.38) 100%
+      rgba(255, 255, 255, 0.15) 0%,
+      rgba(255, 255, 255, 0.04) 48%,
+      rgba(255, 255, 255, 0.10) 100%
     ),
-    @glass-bg;
-  backdrop-filter: blur(48px) saturate(180%);
-  -webkit-backdrop-filter: blur(48px) saturate(180%);
+    @glass-bg,
+    rgba(0, 0, 0, 0.06);
+  backdrop-filter: blur(64px) saturate(220%);
+  -webkit-backdrop-filter: blur(64px) saturate(220%);
 
-  border: 0.5px solid @glass-border;
+  border: 0.5px solid rgba(0, 0, 0, 0.08);
   border-radius: 36px;
 
-  /* 外扩散阴影 + 内顶部高光 */
+  /* 外扩散阴影 + 立体层次 */
   box-shadow:
-    0 20px 50px rgba(0, 0, 0, 0.08),
-    0 8px 24px rgba(0, 88, 188, 0.06),
-    inset 0 1px 0 @glass-highlight,
-    inset 0 -1px 0 rgba(255, 255, 255, 0.25);
+    0 4px 24px rgba(0, 0, 0, 0.06),
+    0 1px 3px rgba(0, 0, 0, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    inset 0 -2px 3px rgba(0, 0, 0, 0.04);
 }
 
 /* 顶部镜面高光 */
@@ -72,7 +73,7 @@
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(255, 255, 255, 0.95) 50%,
+    rgba(255, 255, 255, 0.32) 50%,
     transparent 100%
   );
   pointer-events: none;
@@ -86,7 +87,7 @@
   border-radius: inherit;
   background: radial-gradient(
     ellipse 80% 60% at 50% -20%,
-    rgba(255, 255, 255, 0.45) 0%,
+    rgba(255, 255, 255, 0.12) 0%,
     transparent 70%
   );
   pointer-events: none;
@@ -126,9 +127,9 @@
   background:
     linear-gradient(
       165deg,
-      rgba(255, 255, 255, 0.78) 0%,
-      rgba(255, 255, 255, 0.52) 45%,
-      rgba(255, 255, 255, 0.65) 100%
+      rgba(255, 255, 255, 0.32) 0%,
+      rgba(255, 255, 255, 0.14) 45%,
+      rgba(255, 255, 255, 0.24) 100%
     ),
     @pill-bg;
   backdrop-filter: blur(20px) saturate(160%);
@@ -136,10 +137,10 @@
 
   border: 0.5px solid @pill-border;
   box-shadow:
-    0 4px 16px rgba(0, 88, 188, 0.12),
-    0 2px 8px rgba(0, 0, 0, 0.04),
-    inset 0 1px 0 rgba(255, 255, 255, 0.95),
-    inset 0 -2px 6px rgba(0, 88, 188, 0.04);
+    0 1px 6px rgba(0, 88, 188, 0.05),
+    0 1px 2px rgba(0, 0, 0, 0.02),
+    inset 0 1px 0 rgba(255, 255, 255, 0.40),
+    inset 0 -2px 6px rgba(0, 88, 188, 0.02);
 }
 
 /* 激活态 Tab */
