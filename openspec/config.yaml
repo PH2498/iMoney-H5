@@ -1,0 +1,11 @@
+context:
+  project: umi-mobile-app
+  stack: TypeScript / React / UmiJS Max
+  language: zh-CN
+artifact_rules:
+  specs:
+    scenario_format: Given/When/Then
+  proposal:
+    sections: [intent, scope, non-goals, affected-areas, risk, rollout]
+  tasks:
+    format: markdown-checkboxes
