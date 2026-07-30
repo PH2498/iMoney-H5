@@ -2,11 +2,7 @@ import { Button, Empty, Space } from 'antd-mobile';
 import { useEffect, useState } from 'react';
 import { fetchHelloworld } from '@/services/demo';
 
-interface Props {
-  onLoaded?: (msg: string) => void;
-}
-
-const HelloWorldPanel: React.FC<Props> = ({ onLoaded }) => {
+const HelloWorldPanel: React.FC = () => {
   const [message, setMessage] = useState<string>('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -17,7 +13,6 @@ const HelloWorldPanel: React.FC<Props> = ({ onLoaded }) => {
     try {
       const data = await fetchHelloworld();
       setMessage(data.message);
-      onLoaded?.(data.message);
     } catch {
       setError(true);
     } finally {

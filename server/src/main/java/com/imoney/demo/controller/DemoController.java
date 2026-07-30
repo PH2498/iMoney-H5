@@ -1,10 +1,13 @@
 package com.imoney.demo.controller;
 
 import com.imoney.demo.common.ApiResult;
+import com.imoney.demo.common.ParamException;
 import com.imoney.demo.model.HashResult;
 import com.imoney.demo.model.SortResult;
 import com.imoney.demo.service.DemoService;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +18,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Demo 接口路由：/api/v1/*。
@@ -31,6 +36,8 @@ import java.util.List;
 @RequestMapping("/api/v1")
 public class DemoController {
 
+    private static final Logger log = LoggerFactory.getLogger(DemoController.class);
+
     private final DemoService demoService;
 
     @Autowired
@@ -40,8 +47,8 @@ public class DemoController {
 
     /** HelloWorld 接口 */
     @GetMapping("/helloworld")
-    public ApiResult<java.util.Map<String, Object>> helloworld() {
-        return ApiResult.success(java.util.Collections.singletonMap("message", "Hello, World!"));
+    public ApiResult<Map<String, Object>> helloworld() {
+        return ApiResult.success(Collections.singletonMap("message", "Hello, World!"));
     }
 
     /** 哈希接口 */
@@ -64,7 +71,7 @@ public class DemoController {
                 try {
                     parsed.add(Integer.parseInt(trimmed));
                 } catch (NumberFormatException e) {
-                    throw new com.imoney.demo.common.BusinessException(40001, "参数类型错误: " + trimmed);
+                    throw new ParamException("参数类型错误: " + trimmed);
                 }
             }
         }
@@ -72,7 +79,13 @@ public class DemoController {
         return ApiResult.success(result);
     }
 
-    /** 导出接口：CSV 文件流 */
+    /**
+     * 导出接口：CSV 文件流。
+     *
+     * <p>先执行 exportToCsv（含 type 校验），确保异常在写流之前抛出，
+     * 由 GlobalExceptionHandler 捕获并返回 JSON 错误体。
+     * 写流阶段用 try-catch 防护：若 response 已 committed 则仅记日志。
+     */
     @GetMapping("/export")
     public void export(
             @RequestParam("type") String type,
@@ -86,6 +99,12 @@ public class DemoController {
         try (OutputStream os = response.getOutputStream()) {
             os.write(csv.getBytes(StandardCharsets.UTF_8));
             os.flush();
+        } catch (IOException e) {
+            if (response.isCommitted()) {
+                log.warn("导出写流阶段 IOException（response 已 committed）: {}", e.getMessage());
+            } else {
+                throw e;
+            }
         }
     }
 }

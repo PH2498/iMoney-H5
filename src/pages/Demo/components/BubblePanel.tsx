@@ -2,11 +2,7 @@ import { Button, Empty, Input, Space } from 'antd-mobile';
 import { useState } from 'react';
 import { fetchBubble, type BubbleResult } from '@/services/demo';
 
-interface Props {
-  onLoaded?: (summary: string) => void;
-}
-
-const BubblePanel: React.FC<Props> = ({ onLoaded }) => {
+const BubblePanel: React.FC = () => {
   const [arrText, setArrText] = useState('5,3,8,1,9,2,7');
   const [result, setResult] = useState<BubbleResult | null>(null);
   const [loading, setLoading] = useState(false);
@@ -22,7 +18,6 @@ const BubblePanel: React.FC<Props> = ({ onLoaded }) => {
         .filter((n) => !Number.isNaN(n));
       const data = await fetchBubble(arr);
       setResult(data);
-      onLoaded?.(`swaps: ${data.swaps}`);
     } catch {
       setError(true);
     } finally {

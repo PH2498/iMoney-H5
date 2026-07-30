@@ -15,6 +15,9 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addMapping("/api/**")
                 .allowedOrigins("*")
                 .allowedMethods("*")
-                .allowedHeaders("*");
+                .allowedHeaders("*")
+                // 暴露 Content-Disposition 头，支撑前端从响应头读取导出文件名
+                .exposedHeaders("Content-Disposition")
+                .maxAge(3600);
     }
 }

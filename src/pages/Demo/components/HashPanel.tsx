@@ -2,11 +2,7 @@ import { Button, Empty, Form, Input, Space } from 'antd-mobile';
 import { useState } from 'react';
 import { fetchHash, type HashResult } from '@/services/demo';
 
-interface Props {
-  onLoaded?: (summary: string) => void;
-}
-
-const HashPanel: React.FC<Props> = ({ onLoaded }) => {
+const HashPanel: React.FC = () => {
   const [input, setInput] = useState('hello');
   const [result, setResult] = useState<HashResult | null>(null);
   const [loading, setLoading] = useState(false);
@@ -18,7 +14,6 @@ const HashPanel: React.FC<Props> = ({ onLoaded }) => {
     try {
       const data = await fetchHash(input);
       setResult(data);
-      onLoaded?.(`${data.algorithm}: ${data.input}`);
     } catch {
       setError(true);
     } finally {

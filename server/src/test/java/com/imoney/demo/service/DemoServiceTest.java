@@ -1,5 +1,6 @@
 package com.imoney.demo.service;
 
+import com.imoney.demo.common.ParamException;
 import com.imoney.demo.model.HashResult;
 import com.imoney.demo.model.SortResult;
 import org.junit.jupiter.api.Test;
@@ -60,12 +61,25 @@ class DemoServiceTest {
     }
 
     @Test
-    void exportToCsv_all() {
+    void exportToCsv_all_containsAllSections() {
         String csv = service.exportToCsv("all");
-        assertTrue(csv.startsWith("type,summary"));
-        assertTrue(csv.contains("helloworld,Hello World!"));
-        assertTrue(csv.contains("hash,SHA-256"));
-        assertTrue(csv.contains("swaps"));
+        // 多段 CSV：每类型一段带各自表头和完整数据
+        assertTrue(csv.contains("# HelloWorld"), "all 导出应包含 HelloWorld 段标题");
+        assertTrue(csv.contains("message"), "all 导出应包含 HelloWorld 表头");
+        assertTrue(csv.contains("Hello, World!"), "all 导出应包含 HelloWorld 数据");
+
+        assertTrue(csv.contains("# Hash"), "all 导出应包含 Hash 段标题");
+        assertTrue(csv.contains("input,algorithm,hash"), "all 导出应包含 Hash 表头");
+        assertTrue(csv.contains("SHA-256"), "all 导出应包含算法名");
+        // hash 值为 64 位十六进制，确保完整 hash 值在 all 导出中（M2 修复点）
+        assertTrue(csv.matches("(?s).*SHA-256,[0-9a-f]{64}.*"), "all 导出应包含完整 hash 值");
+
+        assertTrue(csv.contains("# Bubble"), "all 导出应包含 Bubble 段标题");
+        assertTrue(csv.contains("input,sorted,swaps"), "all 导出应包含 Bubble 表头");
+        assertTrue(csv.contains("swaps"), "all 导出应包含 swaps 字段");
+        // 确保排序前后数组在 all 导出中（M2 修复点：之前仅给摘要）
+        assertTrue(csv.contains("\"5,3,8,1,9,2,7\""), "all 导出应包含排序前数组");
+        assertTrue(csv.contains("\"1,2,3,5,7,8,9\""), "all 导出应包含排序后数组");
     }
 
     @Test
@@ -84,5 +98,16 @@ class DemoServiceTest {
     void exportToCsv_helloworld() {
         String csv = service.exportToCsv("helloworld");
         assertEquals("message\nHello, World!\n", csv);
+    }
+
+    @Test
+    void exportToCsv_emptyType_throwsParamException() {
+        assertThrows(ParamException.class, () -> service.exportToCsv(""));
+        assertThrows(ParamException.class, () -> service.exportToCsv(null));
+    }
+
+    @Test
+    void exportToCsv_unknownType_throwsParamException() {
+        assertThrows(ParamException.class, () -> service.exportToCsv("unknown"));
     }
 }

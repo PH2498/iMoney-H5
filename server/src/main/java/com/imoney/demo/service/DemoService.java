@@ -1,6 +1,7 @@
 package com.imoney.demo.service;
 
 import com.imoney.demo.common.BusinessException;
+import com.imoney.demo.common.ParamException;
 import com.imoney.demo.model.HashResult;
 import com.imoney.demo.model.SortResult;
 import org.springframework.stereotype.Service;
@@ -63,7 +64,7 @@ public class DemoService {
      */
     public String exportToCsv(String type) {
         if (type == null || type.isEmpty()) {
-            throw new BusinessException(40001, "导出类型不能为空");
+            throw new ParamException("导出类型不能为空");
         }
         switch (type) {
             case "helloworld":
@@ -77,14 +78,38 @@ public class DemoService {
                 String sortedCsv = quote(join(s.getSorted()));
                 return "input,sorted,swaps\n" + inputCsv + "," + sortedCsv + "," + s.getSwaps() + "\n";
             case "all":
-                SortResult allSort = bubbleSort(null);
-                return "type,summary\n"
-                        + "helloworld,Hello World!\n"
-                        + "hash,SHA-256\n"
-                        + "bubble," + allSort.getSwaps() + " swaps\n";
+                return exportAll();
             default:
-                throw new BusinessException(40001, "unknown export type: " + type);
+                throw new ParamException("unknown export type: " + type);
         }
+    }
+
+    /**
+     * 全量导出：多段 CSV，每类型一段带各自表头和完整数据。
+     */
+    private String exportAll() {
+        StringBuilder sb = new StringBuilder();
+
+        // HelloWorld 段
+        sb.append("# HelloWorld\n");
+        sb.append("message\n");
+        sb.append("Hello, World!\n\n");
+
+        // Hash 段
+        HashResult r = hashString(DEFAULT_HASH_INPUT);
+        sb.append("# Hash\n");
+        sb.append("input,algorithm,hash\n");
+        sb.append(r.getInput()).append(",").append(r.getAlgorithm()).append(",").append(r.getHash()).append("\n\n");
+
+        // Bubble 段
+        SortResult s = bubbleSort(null);
+        sb.append("# Bubble\n");
+        sb.append("input,sorted,swaps\n");
+        sb.append(quote(join(s.getInput()))).append(",");
+        sb.append(quote(join(s.getSorted()))).append(",");
+        sb.append(s.getSwaps()).append("\n");
+
+        return sb.toString();
     }
 
     private static String sha256(String input) {
