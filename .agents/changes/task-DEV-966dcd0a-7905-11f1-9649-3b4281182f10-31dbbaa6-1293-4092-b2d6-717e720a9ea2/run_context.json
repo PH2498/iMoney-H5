@@ -1,0 +1,28 @@
+{
+  "task_id": "DEV-966dcd0a-7905-11f1-9649-3b4281182f10-31dbbaa6-1293-4092-b2d6-717e720a9ea2",
+  "stage": "review",
+  "skill": "/code-review-skill",
+  "review_repo": "iMoney-H5",
+  "review_date": "2026-07-30",
+  "change_scope": "24 files changed, +2181/-1 (后端 Java server/ 子工程 + 前端 src/pages/Demo)",
+  "blocker_count": 2,
+  "blockers": [
+    {
+      "id": "B1",
+      "file": "server/src/main/java/com/imoney/demo/common/GlobalExceptionHandler.java",
+      "summary": "BusinessException(code=40001) 被映射为 HTTP 500，违反需求契约'参数非法→40001→HTTP 400'，与 MethodArgumentTypeMismatchException→HTTP 400 行为不一致"
+    },
+    {
+      "id": "B2",
+      "file": "src/services/demo.ts",
+      "summary": "exportDemo 固定 responseType:'blob'+skipErrorHandler，导出失败时后端返回 JSON 错误体被当 Blob 下载，用户无感知，违反'导出失败→Toast 提示'需求"
+    }
+  ],
+  "critical_count": 2,
+  "major_count": 3,
+  "minor_count": 4,
+  "verdict": "not_passed",
+  "cr_report_path": ".agents/20260730-新增Java算法接口与前端展示导出/cr_report.md",
+  "verification_method": "static_review (java/mvn unavailable, degraded per protocol)",
+  "cross_repo_alignment": "pass (前后端接口契约/路径/入参/响应体/端口全对齐; ArmBasic/iMoney/PH2498.github.io 无改动)"
+}
