@@ -1,4 +1,4 @@
-import { Button, Empty, Input, Space } from 'antd-mobile';
+import { Button, Empty, Input, Space, Toast } from 'antd-mobile';
 import { useState } from 'react';
 import { fetchBubble, type BubbleResult } from '@/services/demo';
 
@@ -12,10 +12,22 @@ const BubblePanel: React.FC = () => {
     setLoading(true);
     setError(false);
     try {
-      const arr = arrText
-        .split(',')
-        .map((s) => parseInt(s.trim(), 10))
-        .filter((n) => !Number.isNaN(n));
+      const parts = arrText.split(',');
+      const arr: number[] = [];
+      for (const part of parts) {
+        const trimmed = part.trim();
+        if (trimmed === '') continue;
+        const parsed = parseInt(trimmed, 10);
+        if (Number.isNaN(parsed)) {
+          Toast.show({ content: '输入包含非数字，请检查', icon: 'fail' });
+          return;
+        }
+        arr.push(parsed);
+      }
+      if (arr.length === 0) {
+        Toast.show({ content: '请输入数字', icon: 'fail' });
+        return;
+      }
       const data = await fetchBubble(arr);
       setResult(data);
     } catch {

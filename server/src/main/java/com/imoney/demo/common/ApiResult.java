@@ -4,7 +4,7 @@ package com.imoney.demo.common;
  * 统一响应封装：{code, message, data}。
  *
  * <p>code = 0 表示成功，非 0 表示业务/系统错误。
- * 不可变对象：仅通过工厂方法 success()/error() 构造，不暴露 setter。
+ * 可变对象：提供全参构造器和工厂方法 success()/error()，仅暴露 getter。
  */
 public class ApiResult<T> {
 
