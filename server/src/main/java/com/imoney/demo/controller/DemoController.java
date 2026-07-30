@@ -91,6 +91,9 @@ public class DemoController {
             @RequestParam("type") String type,
             @RequestParam(value = "format", defaultValue = "csv") String format,
             HttpServletResponse response) throws IOException {
+        if (!"csv".equalsIgnoreCase(format)) {
+            throw new ParamException("不支持的导出格式: " + format + "，仅支持 csv");
+        }
         String csv = demoService.exportToCsv(type);
         String filename = type + ".csv";
         response.setContentType("text/csv");
