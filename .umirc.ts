@@ -4,6 +4,12 @@ export default defineConfig({
   model: {},
   initialState: {},
   request: {},
+  proxy: {
+    '/api': {
+      target: 'http://localhost:8080',
+      changeOrigin: true,
+    },
+  },
   extraPostCSSPlugins: [
     require('postcss-px-to-viewport')({
       viewportWidth: 375,
@@ -38,6 +44,11 @@ export default defineConfig({
       name: '我的',
       path: '/mine',
       component: './Mine',
+    },
+    {
+      name: '演示',
+      path: '/demo',
+      component: './Demo',
     },
   ],
   npmClient: 'yarn',

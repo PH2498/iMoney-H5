@@ -1,0 +1,57 @@
+{
+  "task_id": "DEV-966dcd0a-7905-11f1-9649-3b4281182f10-31dbbaa6-1293-4092-b2d6-717e720a9ea2",
+  "stage": "review",
+  "skill": "/code-review-skill",
+  "review_repo": "iMoney-H5",
+  "review_date": "2026-07-30",
+  "review_round": 3,
+  "change_scope": "24 files changed, +2181/-1 (后端 Java server/ 子工程 + 前端 src/pages/Demo)",
+  "blocker_count": 0,
+  "blockers": [],
+  "major_count": 0,
+  "majors": [],
+  "minor_count": 2,
+  "minors": [
+    {
+      "id": "Minor-1",
+      "file": "server/src/main/java/com/imoney/demo/common/ApiResult.java",
+      "summary": "注释'仅通过工厂方法 success()/error() 构造'与存在 public 构造器略有出入。注意：类无 setter，注释'不暴露 setter'准确（非阻塞，无安全风险）"
+    },
+    {
+      "id": "Minor-2",
+      "file": "server/src/main/java/com/imoney/demo/service/DemoService.java",
+      "summary": "exportToCsv 始终用默认数据 DEFAULT_HASH_INPUT，不反映用户实际输入（已 server/README.md 文档化，后续迭代可改 POST 接口）"
+    }
+  ],
+  "verdict": "passed",
+  "previous_blockers_resolved": [
+    {
+      "id": "B1",
+      "resolution": "已修复：bubble 接口参数错误抛 ParamException（非 BusinessException），被 GlobalExceptionHandler.handleBadRequest 映射 HTTP 400；BusinessException 构造器强制 code >= 50000，语义分离"
+    },
+    {
+      "id": "B2",
+      "resolution": "已修复：exportDemo 已实现 Content-Type 检查，后端返回 JSON 错误体时解析并 throw，交由调用方 Toast 提示"
+    }
+  ],
+  "previous_majors_resolved": [
+    {
+      "id": "Major-1",
+      "resolution": "已修复：WebConfig.java 使用 allowedOriginPatterns(\"http://localhost:*\", \"http://127.0.0.1:*\") 限定本地来源 + @Profile(\"dev\") 限定环境，不再使用 allowedOrigins(\"*\")"
+    }
+  ],
+  "previous_minors_resolved": [
+    {
+      "id": "Minor-3(后端)",
+      "resolution": "已修复：DemoService.sha256 已使用 HexFormat.of().formatHex(bytes) 替代 String.format 逐字节拼接"
+    }
+  ],
+  "cr_report_path": ".agents/20260730-新增Java算法接口与前端展示导出/cr_report.md",
+  "verification_method": "static_review (java/mvn unavailable, degraded per protocol)",
+  "cross_repo_alignment": "pass (前后端接口契约/路径/入参/响应体/端口全对齐; ArmBasic/iMoney/PH2498.github.io 无改动)",
+  "test_case_count": 12,
+  "corrections_from_round2": [
+    "Minor-1 修正：round2 报告误称 ApiResult.java 暴露全字段 setter，实际代码仅有 getter 无 setter，注释'不暴露 setter'准确；真正的问题是注释'仅通过工厂方法构造'与 public 构造器存在略有出入",
+    "test_case_count 修正：round2 报告称 11 个测试用例，实际 DemoServiceTest.java 有 12 个 @Test 方法"
+  ]
+}

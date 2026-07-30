@@ -1,0 +1,8 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: imoney-demo-server
+
+# CORS 由 WebConfig 统一配置，此处仅保留端口与应用名
