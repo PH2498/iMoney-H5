@@ -1,13 +1,18 @@
 package com.imoney.demo.config;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * 全局 CORS 配置：允许所有来源，便于前端联调。
+ *
+ * <p>仅 dev profile 生效；生产环境应通过独立配置限定 allowedOrigins，
+ * 避免使用 {@code allowedOrigins("*")} 带来的安全隐患。
  */
 @Configuration
+@Profile("dev")
 public class WebConfig implements WebMvcConfigurer {
 
     @Override

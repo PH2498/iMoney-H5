@@ -11,6 +11,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HexFormat;
 import java.util.List;
 
 /**
@@ -37,6 +38,9 @@ public class DemoService {
 
     /**
      * 冒泡排序并统计交换次数。arr 为空时用默认数据 [5,3,8,1,9,2,7]。
+     *
+     * <p>方法内部创建入参副本（{@code new ArrayList<>(arr)}），不会修改传入的 List。
+     * 调用方传入不可变 List（如 {@code List.of} / {@code Arrays.asList}）亦安全。
      */
     public SortResult bubbleSort(List<Integer> arr) {
         if (arr == null || arr.isEmpty()) {
@@ -59,6 +63,9 @@ public class DemoService {
 
     /**
      * 根据类型生成 CSV 字符串。
+     *
+     * <p>导出为默认数据快照（DEFAULT_HASH_INPUT / DEFAULT_BUBBLE_ARR），
+     * 不反映前端用户当前输入值。导出接口为无状态 GET，无法携带会话状态。
      *
      * @param type helloworld | hash | bubble | all
      */
@@ -116,11 +123,7 @@ public class DemoService {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
             byte[] bytes = md.digest(input.getBytes(StandardCharsets.UTF_8));
-            StringBuilder sb = new StringBuilder();
-            for (byte b : bytes) {
-                sb.append(String.format("%02x", b));
-            }
-            return sb.toString();
+            return HexFormat.of().formatHex(bytes);
         } catch (NoSuchAlgorithmException e) {
             throw new BusinessException(50000, "SHA-256 not available");
         }

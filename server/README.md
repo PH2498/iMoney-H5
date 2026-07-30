@@ -11,6 +11,8 @@
 | 冒泡排序 | GET | `/api/v1/bubble?arr=5,3,8,1,9,2,7` | `arr` 逗号分隔 int（默认 `[5,3,8,1,9,2,7]`） | `{code:0,...,data:{input,sorted,swaps}}` |
 | 导出 | GET | `/api/v1/export?type=all&format=csv` | `type: helloworld\|hash\|bubble\|all` | CSV 文件流 `Content-Disposition: attachment` |
 
+**导出语义**：导出接口为无状态 GET，始终导出默认数据快照（hash 用 `hello`，冒泡用 `[5,3,8,1,9,2,7]`），不反映前端用户当前页面输入的值。
+
 ## 运行
 
 ```bash
@@ -21,7 +23,7 @@ mvn clean package
 java -jar target/imoney-demo-server-0.1.0.jar
 ```
 
-默认端口 8080，CORS 全开（`*`），便于前端联调。
+默认端口 8080。CORS 仅在 `dev` profile 生效（`--spring.profiles.active=dev`），便于前端直接跨域联调；前端 proxy 模式下同源访问不依赖 CORS。
 
 ## 测试
 
