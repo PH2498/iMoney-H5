@@ -4,10 +4,7 @@ package com.imoney.demo.common;
  * 统一响应封装：{code, message, data}。
  *
  * <p>code = 0 表示成功，非 0 表示业务/系统错误。
- *
- * <p>响应体保留全字段 setter 以兼容 Jackson 反序列化与框架兼容；
- * 生产环境建议后续迭代引入 Lombok {@code @Data} 或改为不可变对象
- * （当前无实际安全风险，仅在工厂方法内构造）。
+ * 不可变对象：仅通过工厂方法 success()/error() 构造，不暴露 setter。
  */
 public class ApiResult<T> {
 
@@ -36,23 +33,11 @@ public class ApiResult<T> {
         return code;
     }
 
-    public void setCode(int code) {
-        this.code = code;
-    }
-
     public String getMessage() {
         return message;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
     public T getData() {
         return data;
-    }
-
-    public void setData(T data) {
-        this.data = data;
     }
 }

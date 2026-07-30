@@ -6,10 +6,8 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
- * 全局 CORS 配置：允许所有来源，便于前端联调。
- *
- * <p>仅 dev profile 生效；生产环境应通过独立配置限定 allowedOrigins，
- * 避免使用 {@code allowedOrigins("*")} 带来的安全隐患。
+ * 全局 CORS 配置：仅允许本地开发来源，便于前端联调。
+ * TODO 生产环境需配置具体 allowedOriginPatterns 或通过 Nginx 同源代理。
  */
 @Configuration
 @Profile("dev")
@@ -18,7 +16,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/api/**")
-                .allowedOrigins("*")
+                .allowedOriginPatterns("http://localhost:*", "http://127.0.0.1:*")
                 .allowedMethods("*")
                 .allowedHeaders("*")
                 // 暴露 Content-Disposition 头，支撑前端从响应头读取导出文件名
