@@ -4,23 +4,30 @@
   "skill": "/code-review-skill",
   "review_repo": "iMoney-H5",
   "review_date": "2026-07-30",
+  "review_round": 2,
   "change_scope": "24 files changed, +2181/-1 (后端 Java server/ 子工程 + 前端 src/pages/Demo)",
   "blocker_count": 0,
   "blockers": [],
-  "major_count": 2,
-  "majors": [
+  "major_count": 0,
+  "majors": [],
+  "minor_count": 3,
+  "minors": [
     {
-      "id": "Major-1",
-      "file": "server/src/main/java/com/imoney/demo/config/WebConfig.java",
-      "summary": "CORS allowedOrigins(\"*\") 生产安全隐患，建议加 @Profile(\"dev\") 或限定来源（Demo 场景可豁免）"
+      "id": "Minor-1",
+      "file": "server/src/main/java/com/imoney/demo/common/ApiResult.java",
+      "summary": "类注释声称'不暴露 setter'但实际暴露全字段 setter，注释与实现矛盾（非阻塞，无安全风险）"
     },
     {
-      "id": "Major-2",
+      "id": "Minor-2",
       "file": "server/src/main/java/com/imoney/demo/service/DemoService.java",
-      "summary": "exportToCsv 始终用默认数据 DEFAULT_HASH_INPUT，不反映用户实际输入（Demo 可接受，需文档说明导出为默认数据快照语义）"
+      "summary": "exportToCsv 始终用默认数据 DEFAULT_HASH_INPUT，不反映用户实际输入（已 server/README.md 文档化，后续迭代可改 POST 接口）"
+    },
+    {
+      "id": "Minor-3",
+      "file": "src/pages/Demo/components/BubblePanel.tsx",
+      "summary": "前端解析 .filter((n) => !Number.isNaN(n)) 静默过滤非法输入，与后端抛 ParamException 报错行为不一致（非阻塞）"
     }
   ],
-  "minor_count": 3,
   "verdict": "passed",
   "previous_blockers_resolved": [
     {
@@ -30,6 +37,18 @@
     {
       "id": "B2",
       "resolution": "已修复：exportDemo 已实现 Content-Type 检查，后端返回 JSON 错误体时解析并 throw，交由调用方 Toast 提示"
+    }
+  ],
+  "previous_majors_resolved": [
+    {
+      "id": "Major-1",
+      "resolution": "已修复：WebConfig.java 使用 allowedOriginPatterns(\"http://localhost:*\", \"http://127.0.0.1:*\") 限定本地来源 + @Profile(\"dev\") 限定环境，不再使用 allowedOrigins(\"*\")"
+    }
+  ],
+  "previous_minors_resolved": [
+    {
+      "id": "Minor-3(后端)",
+      "resolution": "已修复：DemoService.sha256 已使用 HexFormat.of().formatHex(bytes) 替代 String.format 逐字节拼接"
     }
   ],
   "cr_report_path": ".agents/20260730-新增Java算法接口与前端展示导出/cr_report.md",
