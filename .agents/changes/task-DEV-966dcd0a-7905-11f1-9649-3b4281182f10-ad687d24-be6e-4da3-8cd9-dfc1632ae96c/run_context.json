@@ -1,0 +1,27 @@
+{
+  "task_id": "DEV-966dcd0a-7905-11f1-9649-3b4281182f10-ad687d24-be6e-4da3-8cd9-dfc1632ae96c",
+  "stage": "test",
+  "node": "代码评审",
+  "skill": "/dtazziboot-java-code-review",
+  "blocker_count": 14,
+  "blocker_breakdown": {
+    "G16.2_CatchWithoutLogging": 13,
+    "B029_AbsMinOverflow": 1
+  },
+  "major_count": 5,
+  "info_count": 4,
+  "scan_all_rules_summary": {
+    "rules_scanned": "52/222",
+    "raw_findings": 20,
+    "raw_p0": 15,
+    "raw_p1": 5,
+    "raw_p2": 0,
+    "false_positive_eliminated": 1,
+    "false_positive_detail": "S1.1 MyBatisSqlInjection @ pom.xml:36 — 实际为 Apache POI 依赖声明，项目无 MyBatis，使用内存存储 ConcurrentLinkedQueue",
+    "llm_supplemented_p0": 1,
+    "llm_supplemented_detail": "B029 AbsMinOverflow @ PersonMetaRepository.java:42 — Math.abs(Integer.MIN_VALUE) 边界 bug，scan 脚本未覆盖此规则"
+  },
+  "merge_recommendation": "Conditionally Approve",
+  "report_path": ".agents/system.changes/cr_report.md",
+  "review_date": "2026-07-31"
+}
