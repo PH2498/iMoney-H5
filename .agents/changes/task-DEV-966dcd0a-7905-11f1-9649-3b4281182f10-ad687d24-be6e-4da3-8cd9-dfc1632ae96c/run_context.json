@@ -1,0 +1,54 @@
+{
+  "task_id": "DEV-966dcd0a-7905-11f1-9649-3b4281182f10-ad687d24-be6e-4da3-8cd9-dfc1632ae96c",
+  "stage": "test",
+  "node": "代码评审",
+  "skill": "/dtazziboot-java-code-review",
+  "blocker_count": 0,
+  "blocker_breakdown": {},
+  "major_count": 0,
+  "info_count": 4,
+  "review_type": "复审（基于问题修复阶段后的最新代码）",
+  "initial_review_summary": {
+    "blocker_count": 14,
+    "blocker_breakdown": {
+      "G16.2_CatchWithoutLogging": 13,
+      "B029_AbsMinOverflow": 1
+    },
+    "major_count": 5,
+    "info_count": 4
+  },
+  "re_review_resolution": {
+    "G16.2_CatchWithoutLogging": {
+      "initial_count": 14,
+      "resolved_count": 14,
+      "resolution": "全部为 scan 脚本误报（G16.2 规则仅匹配 catch( 字符串，不检查块内日志语句）。逐文件核验：14 个 catch 块均含 log.warn/log.error"
+    },
+    "B029_AbsMinOverflow": {
+      "initial_count": 1,
+      "resolved_count": 1,
+      "resolution": "已修复：Math.abs(callerId.hashCode()) → (callerId.hashCode() & 0x7fffffff) @ PersonMetaRepository.java:43"
+    },
+    "M007_EmptyCatch": {
+      "initial_count": 2,
+      "resolved_count": 2,
+      "resolution": "已修复：DemoController.java:126,135 添加 log.warn(\"write error response failed\", ignored)"
+    },
+    "M016_JavaTimeDefaultTimeZone": {
+      "initial_count": 3,
+      "resolved_count": 3,
+      "resolution": "已修复：CallRecord.java:24, MetricsStore.java:31, MetricsService.java:88 均使用 ZoneId.of(DemoConstants.ZONE_ID)=Asia/Shanghai"
+    }
+  },
+  "scan_all_rules_summary": {
+    "rules_scanned": "52/222",
+    "raw_findings": 14,
+    "raw_p0": 14,
+    "raw_p1": 0,
+    "raw_p2": 0,
+    "false_positive_eliminated": 14,
+    "false_positive_detail": "G16.2 CatchWithoutLogging ×14 — scan 脚本 G16.2 规则（scan-all-rules.sh:294）仅匹配 catch( 字符串模式，不检查 catch 块内部是否有 log. 调用。逐文件核验确认全部 14 个 catch 块均含 log.warn/log.error 语句"
+  },
+  "merge_recommendation": "Approve",
+  "report_path": ".agents/system.changes/cr_report.md",
+  "review_date": "2026-07-31"
+}
