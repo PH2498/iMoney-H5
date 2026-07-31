@@ -39,6 +39,11 @@ export default defineConfig({
       path: '/mine',
       component: './Mine',
     },
+    {
+      name: '算法演示',
+      path: '/demo',
+      component: './Demo',
+    },
   ],
   npmClient: 'yarn',
 });
